@@ -23,39 +23,56 @@ pip install nanda-adapter
 
 ## Steps to create a test example using this repo
 
+### Prerequisities
+
+To build your own agent and add it to a publicly accessible agent registry, you will need a public domain name and a public IP address. Your local computer's domain name and IP address is private. For a public IP address, you will need to create a virtual machine (e.g. AWS VM, Microsoft VM). For a public domain name, you will need to create one using a registry service (e.g. Namecheap, GoDaddy, etc.). On the registry service's website you will create a record that connects the public IP address and the public domain name.
+
+### 1. AWS account with a EC2 Linux instance
+Create an [AWS account](https://aws.amazon.com). Create a EC2 Linux instance and during creation make a network security group that allows the following ports: 22 (SSH), 80 (HTTP), 443 (HTTPS), 3000 (custom TCP), 5001 (custom TCP), 600-6200 (custom TCP), 8080 (custom TCP), 6900 (custom TCP). Create a key pair and save the .pem file locally.
+
+### 2. Create a domain name
+Register a domain name (e.g. test_domain.com) via Namecheap, GoDaddy, etc. In the domain's DNS settings, create an "A" record that points the domain name to your EC2 instance's public IPv4 address.
+![dns](./imgs/godaddy_dns.png)
+
+### 3. Anthropic account with API key
+Create an [anthropic account](https://www.anthropic.com) and generate API key. Keep track of this key.
+
+### Create a test agent and add it to an agent registry
+
 ### 1. Clone this repository
 
-> git clone github.com/projnanda/adapter
+> git clone https://github.com/LaurenDiana16/nanda-adapter-sdk.git
 
-### 2. Setup dependencies
+### 2. Create a python3 virtual environment and activate it
+
+> python3 -m venv environments/venv
+
+> source environments/venv/bin/activate
+
+### 3. Setup dependencies
+
 > cd nanda_agent/examples
 
 > pip install -r requirements.txt
 
-### 3. Configure your Domain and SSL Certificates (move certificates into current path)
+### 4. Move certificates into current path
 
-> sudo certbot certonly --standalone -d <YOUR_DOMAIN_NAME.COM>
+> cp <location of .pem file> ./fullchain.pem
+> cp <location of .pem file> ./privkey.pem
 
-> sudo cp -L /etc/letsencrypt/live/<YOUR_DOMAIN_NAME.COM>/fullchain.pem .
+### 5. Set your enviroment variables
 
-> sudo cp -L /etc/letsencrypt/live/<YOUR_DOMAIN_NAME.COM>/privkey.pem .
+> export ANTHROPIC_API_KEY="your-api-key-here"
 
-> sudo chown $USER:$USER fullchain.pem privkey.pem
+> export DOMAIN_NAME="your-domain-name.com"
 
-> chmod 600 fullchain.pem privkey.pem`
+### 6. Run an example agent (langchain_pirate.py)
 
-### 4. Set Your enviroment variables ANTHROPIC_API_KEY (For running your personal hosted agents, need API key and your own domain)
-
-> export ANTHROPIC_API_KEY="your-api-key-here
-
-> export DOMAIN_NAME="<YOUR_DOMAIN_NAME.COM>
-
-### 5. Run an example agent (langchain_pirate.py)
 > nohup python3 langchain_pirate.py > out.log 2>&1 &
 
-### 6. Get your enrollment link from Log File
-> cat out.log
+### 7. Get your enrollment link from Log File
 
+> cat out.log
 
 ## Examples for How to create your own agent
 You can create an agent using your custom ReACT framework or any agent package like LangChain, CrewAI etc.
