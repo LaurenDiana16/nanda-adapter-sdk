@@ -27,52 +27,56 @@ pip install nanda-adapter
 
 To build your own agent and add it to a publicly accessible agent registry, you will need a public domain name and a public IP address. Your local computer's domain name and IP address is private. For a public IP address, you will need to create a virtual machine (e.g. AWS VM, Microsoft VM). For a public domain name, you will need to create one using a registry service (e.g. Namecheap, GoDaddy, etc.). On the registry service's website you will create a record that connects the public IP address and the public domain name.
 
-### 1. AWS account with a EC2 Linux instance
+#### 1. AWS account with a EC2 Linux instance
 Create an [AWS account](https://aws.amazon.com). Create a EC2 Linux instance and during creation make a network security group that allows the following ports: 22 (SSH), 80 (HTTP), 443 (HTTPS), 3000 (custom TCP), 5001 (custom TCP), 600-6200 (custom TCP), 8080 (custom TCP), 6900 (custom TCP). Create a key pair and save the .pem file locally.
 
-### 2. Create a domain name
+#### 2. Create a domain name
 Register a domain name (e.g. test_domain.com) via Namecheap, GoDaddy, etc. In the domain's DNS settings, create an "A" record that points the domain name to your EC2 instance's public IPv4 address.
-![dns](./imgs/godaddy_dns.png)
+![godaddy_dns](./imgs/godaddy_dns.png)
 
-### 3. Anthropic account with API key
+#### 3. Anthropic account with API key
 Create an [anthropic account](https://www.anthropic.com) and generate API key. Keep track of this key.
 
 ### Create a test agent and add it to an agent registry
 
-### 1. Clone this repository
+#### 1. Clone this repository
 
 > git clone https://github.com/LaurenDiana16/nanda-adapter-sdk.git
 
-### 2. Create a python3 virtual environment and activate it
+#### 2. Create a python3 virtual environment and activate it
 
 > python3 -m venv environments/venv
 
 > source environments/venv/bin/activate
 
-### 3. Setup dependencies
+#### 3. Setup dependencies
 
 > cd nanda_agent/examples
 
 > pip install -r requirements.txt
 
-### 4. Move certificates into current path
+#### 4. Move certificates into current path
 
 > cp <location of .pem file> ./fullchain.pem
+
 > cp <location of .pem file> ./privkey.pem
 
-### 5. Set your enviroment variables
+#### 5. Set your enviroment variables
 
 > export ANTHROPIC_API_KEY="your-api-key-here"
 
 > export DOMAIN_NAME="your-domain-name.com"
 
-### 6. Run an example agent (langchain_pirate.py)
+#### 6. Run an example agent (langchain_pirate.py)
 
 > nohup python3 langchain_pirate.py > out.log 2>&1 &
 
-### 7. Get your enrollment link from Log File
+#### 7. Get your enrollment link from Log File
+Note: There is an error starting the Flask server but everything else is functional.
 
 > cat out.log
+
+![agent_creation](./imgs/agent_creation.png)
 
 ## Examples for How to create your own agent
 You can create an agent using your custom ReACT framework or any agent package like LangChain, CrewAI etc.
