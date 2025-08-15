@@ -28,7 +28,7 @@ pip install nanda-adapter
 To build your own agent and add it to a publicly accessible agent registry, you will need a public domain name and a public IP address. Your local computer's domain name and IP address is private. For a public IP address, you will need to create a virtual machine (e.g. AWS VM, Microsoft VM). For a public domain name, you will need to create one using a registry service (e.g. Namecheap, GoDaddy, etc.). On the registry service's website you will create a record that connects the public IP address and the public domain name.
 
 #### 1. AWS account with a EC2 Linux instance (instance type of t2.large was used)
-Create an [AWS account](https://aws.amazon.com). Create a EC2 Linux instance and during creation make a network security group that allows the following ports: 22 (SSH), 80 (HTTP), 443 (HTTPS), 3000 (custom TCP), 5001 (custom TCP), 600-6200 (custom TCP), 8080 (custom TCP), 6900 (custom TCP). Create a key pair and save the .pem file locally.
+Create an [AWS account](https://aws.amazon.com). Create a EC2 Linux instance and during creation make a network security group that allows the following ports: 22 (SSH), 80 (HTTP), 443 (HTTPS), 3000 (custom TCP), 5001 (custom TCP), 6000-6200 (custom TCP), 8080 (custom TCP), 6900 (custom TCP). Create a key pair and save the .pem file locally.
 
 #### 2. Create a domain name
 Register a domain name (e.g. test_domain.com) via Namecheap, GoDaddy, etc. In the domain's DNS settings, create an "A" record that points the domain name to your EC2 instance's public IPv4 address.
@@ -60,6 +60,8 @@ Create an [anthropic account](https://www.anthropic.com) and generate API key. K
 > sudo certbot certonly --standalone -d <YOUR_DOMAIN_NAME>
 
 #### 5. Move the certificates to current folder for access and provide required access
+> cd nanda_adapter/examples
+
 > sudo cp -L /etc/letsencrypt/live/<YOUR_DOMAIN_NAME>/fullchain.pem .
 
 > sudo cp -L /etc/letsencrypt/live/<YOUR_DOMAIN_NAME>/privkey.pem .
@@ -69,8 +71,6 @@ Create an [anthropic account](https://www.anthropic.com) and generate API key. K
 > chmod 600 fullchain.pem privkey.pem
 
 #### 6. Install the requirements file
-> cd nanda_adapter/examples
-
 > python -m pip install --upgrade pip && pip3 install -r requirements.txt
 
 #### 7. Export the env variables
