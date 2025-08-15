@@ -86,6 +86,7 @@ Create an [anthropic account](https://www.anthropic.com) and generate API key. K
 ![agent_creation](./imgs/agent_creation.png)
 
 #### 10. Take the link and go to browser for registration
+Note: To test out talking with your agent you need to start your message with "@<agent_id> <your_message>". If you don't, you'll simply get your original message returned back to you.
 ![agent_chat](./imgs/agent_chat.png)
 
 
