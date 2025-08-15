@@ -60,7 +60,7 @@ Create an [anthropic account](https://www.anthropic.com) and generate API key. K
 > sudo certbot certonly --standalone -d <YOUR_DOMAIN_NAME>
 
 #### 5. Move the certificates to current folder for access and provide required access
-> cd nanda_adapter/examples
+> cd nanda-adapter-sdk/nanda_adapter/examples
 
 > sudo cp -L /etc/letsencrypt/live/<YOUR_DOMAIN_NAME>/fullchain.pem .
 
