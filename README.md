@@ -41,12 +41,16 @@ Create an [anthropic account](https://www.anthropic.com) and generate API key. K
 
 #### 1. SSH into the server, ensure the latest software is in the system
 > chmod 400 <YOUR_PEM_KEY>
+
 > ssh -i <YOUR_PEM_KEY> ec2-user@<VM_PUBLIC_IP>
+
 > sudo dnf update -y && sudo dnf install -y python3.11 python3.11-pip certbot
 
 #### 2. Clone this repository
 > cd /home/ec2-user/
+
 > sudo yum install git
+
 > git clone https://github.com/LaurenDiana16/nanda-adapter-sdk.git
 
 #### 3. Create and activate a virtual environment
@@ -57,16 +61,21 @@ Create an [anthropic account](https://www.anthropic.com) and generate API key. K
 
 #### 5. Move the certificates to current folder for access and provide required access
 > sudo cp -L /etc/letsencrypt/live/<YOUR_DOMAIN_NAME>/fullchain.pem .
+
 > sudo cp -L /etc/letsencrypt/live/<YOUR_DOMAIN_NAME>/privkey.pem .
+
 > sudo chown $USER:$USER fullchain.pem privkey.pem
+
 > chmod 600 fullchain.pem privkey.pem
 
 #### 6. Install the requirements file
 > cd nanda_adapter/examples
+
 > python -m pip install --upgrade pip && pip3 install -r requirements.txt
 
 #### 7. Export the env variables
 > export ANTHROPIC_API_KEY="<YOUR_API_KEY>"
+
 > export DOMAIN_NAME="<YOUR_DOMAIN_NAME>"
 
 #### 8. Run an example agent
