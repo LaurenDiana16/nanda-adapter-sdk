@@ -105,7 +105,25 @@ class NANDA:
         # Run the agent bridge server
         run_server(self.bridge, host="0.0.0.0", port=PORT) 
 
-    # Start the Flask API server in a separate thread
+    def configure_ssl_context(cert, key):
+        """Set up the certificate file paths and corresponding ssl context."""
+        # Set default certificate paths from current folder if not provided
+        if not cert or not key:
+            cert = "./fullchain.pem"
+            key = "./privkey.pem"
+            print(f"🔒 Using SSL certificates from: {cert}, {key}")
+        if os.path.exists(cert) and os.path.exists(key):
+            ssl_context = (cert, key)
+            print(f"🔒 Using SSL certificates from: {cert}, {key}")
+            return ssl_context
+        else:
+            print("❌ ERROR: Certificate files not found at specified paths")
+            print(f"Certificate path: {cert}")
+            print(f"Key path: {key}")
+            print(f"💡 Make sure Let's Encrypt certificates exist for domain: {domain}")
+            print(f"💡 You can generate them with: certbot --nginx -d {domain}")
+            return sys.exit(1)
+
     def start_flask_server():
         """Start the Flask API server in a separate thread"""
         try:
@@ -256,22 +274,7 @@ class NANDA:
         # Configure SSL context if needed
         ssl_context = None
         if ssl:
-            # Set default certificate paths from current folder if not provided
-            if not cert or not key:
-                cert = "./fullchain.pem"
-                key = "./privkey.pem"
-                print(f"🔒 Using certificates from current folder: cert={cert}, key={key}")
-            
-            if os.path.exists(cert) and os.path.exists(key):
-                ssl_context = (cert, key)
-                print(f"🔒 Using SSL certificates from: {cert}, {key}")
-            else:
-                print("❌ ERROR: Certificate files not found at specified paths")
-                print(f"Certificate path: {cert}")
-                print(f"Key path: {key}")
-                print(f"💡 Make sure Let's Encrypt certificates exist for domain: {domain}")
-                print(f"💡 You can generate them with: certbot --nginx -d {domain}")
-                sys.exit(1)
+            self.configure_ssl_context(cert, key)
         
         # Start the Flask server in a non-daemon thread
         flask_thread = threading.Thread(target=start_flask_server, daemon=False)
