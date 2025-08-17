@@ -68,15 +68,15 @@ class NANDA:
         api_url = os.getenv("API_URL")
         agent_id = os.getenv("AGENT_ID")
 
-        ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY") or "your key"
+        #ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY") or "your key"
         AGENT_ID = os.getenv("AGENT_ID", "default")  # Default to 'default' if not specified
         PORT = int(os.getenv("PORT", "6000"))
         TERMINAL_PORT = int(os.getenv("TERMINAL_PORT", "6010"))
 
 
-        UI_MODE = os.getenv("UI_MODE", "true").lower() in ("true", "1", "yes", "y")
-        UI_CLIENT_URL = os.getenv("UI_CLIENT_URL", "")
-        print(f"🔧 UI_CLIENT_URL: {UI_CLIENT_URL}")
+        #UI_MODE = os.getenv("UI_MODE", "true").lower() in ("true", "1", "yes", "y")
+        #UI_CLIENT_URL = os.getenv("UI_CLIENT_URL", "")
+        #print(f"🔧 UI_CLIENT_URL: {UI_CLIENT_URL}")
 
         # os.environ["ANTHROPIC_API_KEY"] = ANTHROPIC_API_KEY
         # os.environ["AGENT_ID"] = AGENT_ID
@@ -104,6 +104,20 @@ class NANDA:
         
         # Run the agent bridge server
         run_server(self.bridge, host="0.0.0.0", port=PORT) 
+
+    # Start the Flask API server in a separate thread
+    def start_flask_server():
+        """Start the Flask API server in a separate thread"""
+        try:
+            print(f"🚀 Starting Flask API server on port {api_port}...")
+            run_ui_agent_https.app.run(
+                host='0.0.0.0',
+                port=api_port,
+                threaded=True, 
+                ssl_context=ssl_context
+            )
+        except Exception as e:
+            print(f"❌ Error starting Flask server: {e}")
 
     def start_server_api(self, anthropic_key, domain, agent_id=None, port=6000, api_port=6001, 
                         registry=None, public_url=None, api_url=None, cert=None, key=None, ssl=True):
@@ -258,20 +272,6 @@ class NANDA:
                 print(f"💡 Make sure Let's Encrypt certificates exist for domain: {domain}")
                 print(f"💡 You can generate them with: certbot --nginx -d {domain}")
                 sys.exit(1)
-        
-        # Start the Flask API server in a separate thread
-        def start_flask_server():
-            """Start the Flask API server in a separate thread"""
-            try:
-                print(f"🚀 Starting Flask API server on port {api_port}...")
-                run_ui_agent_https.app.run(
-                    host='0.0.0.0', 
-                    port=api_port, 
-                    threaded=True, 
-                    ssl_context=ssl_context
-                )
-            except Exception as e:
-                print(f"❌ Error starting Flask server: {e}")
         
         # Start the Flask server in a non-daemon thread
         flask_thread = threading.Thread(target=start_flask_server, daemon=False)
